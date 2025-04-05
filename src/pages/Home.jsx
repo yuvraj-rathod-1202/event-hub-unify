@@ -26,6 +26,7 @@ const Home = () => {
   const [filteredEvents, setFilteredEvents] = useState([]);
   const [filteredClubs, setFilteredClubs] = useState([]);
   const [filteredNotices, setFilteredNotices] = useState([]);
+  const [savedNotices, setSavedNotices] = useState([]);
   
   useEffect(() => {
     const fetchData = async () => {
@@ -54,6 +55,8 @@ const Home = () => {
     
     fetchData();
   }, []);
+
+  const isNoticeSaved = (noticeId) => savedNotices.includes(noticeId);
   
   const handleRegisterEvent = (eventId) => {
     console.log('Register for event:', eventId);
@@ -88,6 +91,7 @@ const Home = () => {
     const user = await getUserData(currentUser?.uid);
     const savedNotices = user?.savedNotices || [];
     const isSaved = savedNotices.includes(noticeId);
+    console.log(isSaved);
     return isSaved;
   }
   
@@ -96,11 +100,12 @@ const Home = () => {
   };
   
   const handleSaveNotice = (noticeId) => {
+    setSavedNotices((prevSaved) => [...prevSaved, noticeId]);
     saveNoticeForUser(noticeId, currentUser.uid);
   };
 
   const handleRemoveNotice = (noticeId) => {
-    console.log('Unsave notice:', noticeId);
+    setSavedNotices((prevSaved) => prevSaved.filter((id) => id !== noticeId));
     unsaveNoticeForUser(noticeId, currentUser.uid);
   }
 
@@ -334,7 +339,7 @@ const Home = () => {
                     key={notice.id}
                     notice={notice}
                     onSave={handleSaveNotice}
-                    isSaved={handleSavedNotice(notice.id)}
+                    isSaved={isNoticeSaved(notice.id)}
                     onUnSave={handleRemoveNotice}
                   />
                 ))}

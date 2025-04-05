@@ -80,6 +80,48 @@ const NoticeList = ({ notices, onNoticeUpdate }) => {
       });
     }
   };
+
+  const handleunSaveNotice = async (noticeId) => {
+    if (!currentUser) {
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to unsave notices.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    try {
+      const notice = notices.find(n => n.id === noticeId);
+      
+      if (!notice) {
+        throw new Error('Notice not found');
+      }
+      
+      await unsaveNoticeForUser(noticeId, currentUser.uid);
+      
+      toast({
+        title: "Notice removed",
+        description: `${notice.title} has been removed from your saved notices.`,
+      });
+      
+      setSavedNotices(prev => ({
+        ...prev,
+        [noticeId]: false
+      }));
+      
+      if (onNoticeUpdate) {
+        onNoticeUpdate();
+      }
+    } catch (error) {
+      console.error('Error unsaving notice:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to unsave the notice. Please try again.",
+        variant: "destructive"
+      });
+    }
+  }
   
   if (notices.length === 0) {
     return (
@@ -98,6 +140,7 @@ const NoticeList = ({ notices, onNoticeUpdate }) => {
           notice={notice}
           onSave={handleSaveNotice}
           isSaved={savedNotices[notice.id]}
+          onUnSave={handleunSaveNotice}
         />
       ))}
     </div>
