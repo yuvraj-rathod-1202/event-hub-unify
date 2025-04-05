@@ -39,7 +39,7 @@ const AdminDashboard = () => {
         console.error('Error fetching admin dashboard data:', error);
         toast({
           title: "Error",
-          description: "Failed to load dashboard data. Please try again.",
+          description: `Failed to load dashboard data. Please try again. ${error}`,
           variant: "destructive"
         });
       } finally {
