@@ -47,7 +47,7 @@ const EventCard = ({ event, onRegister, isRegistered, isFull, onSave, isSaved })
         </div>
       </Link>
       
-      <div className="absolute top-4 right-4">
+      {/* <div className="absolute top-4 right-4">
         <button 
           onClick={(e) => {
             e.preventDefault();
@@ -62,7 +62,7 @@ const EventCard = ({ event, onRegister, isRegistered, isFull, onSave, isSaved })
           <Heart className={cn("h-5 w-5", isSaved && "fill-current")} />
         </button>
       </div>
-      
+       */}
       <div className="p-4">
         <div className="flex justify-between items-start mb-2">
           <div>

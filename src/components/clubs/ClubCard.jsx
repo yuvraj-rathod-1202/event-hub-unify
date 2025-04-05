@@ -45,7 +45,7 @@ const ClubCard = ({ club, onJoin, onLeave, isMember, onSave, isSaved, coordinato
         </div>
       </Link>
 
-      <div className="absolute top-4 right-4">
+      {/* <div className="absolute top-4 right-4">
         <button
           onClick={(e) => {
             e.preventDefault();
@@ -59,7 +59,7 @@ const ClubCard = ({ club, onJoin, onLeave, isMember, onSave, isSaved, coordinato
         >
           <Heart className={cn("h-5 w-5", isSaved && "fill-current")} />
         </button>
-      </div>
+      </div> */}
 
       <div className="p-4">
         <div className="flex justify-between items-start mb-2">
