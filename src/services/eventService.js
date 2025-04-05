@@ -10,7 +10,8 @@ import {
   orderBy,
   limit, // Import the limit method
   startAfter,
-  arrayUnion, // Import startAfter for pagination
+  arrayUnion,
+  arrayRemove // Add arrayRemove import for unregisterFromEvent
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
 
