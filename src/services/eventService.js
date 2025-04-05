@@ -4,9 +4,13 @@ import {
   query,
   where,
   addDoc,
+  doc,
+  updateDoc,
+  getDoc,
   orderBy,
   limit, // Import the limit method
-  startAfter, // Import startAfter for pagination
+  startAfter,
+  arrayUnion, // Import startAfter for pagination
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
 
