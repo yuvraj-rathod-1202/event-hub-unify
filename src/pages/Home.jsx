@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -6,7 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import { getAllEvents } from '@/services/eventService';
 import { getAllClubs } from '@/services/clubService';
 import { getAllNotices } from '@/services/noticeService';
-import { Calendar, Users, Bell, Search } from 'lucide-react';
+import { Calendar, Users, Bell, Search, ArrowRight } from 'lucide-react';
 import EventCard from '@/components/events/EventCard';
 import ClubCard from '@/components/clubs/ClubCard';
 import NoticeCard from '@/components/notices/NoticeCard';
@@ -24,10 +23,8 @@ const Home = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        // Register service worker
         await registerServiceWorker();
         
-        // Fetch data for the homepage
         const [eventsData, clubsData, noticesData] = await Promise.all([
           getAllEvents(null, 3),
           getAllClubs(null, 3),
@@ -47,7 +44,6 @@ const Home = () => {
     fetchData();
   }, []);
   
-  // Stub functions for event handling
   const handleRegisterEvent = (eventId) => {
     console.log('Register for event:', eventId);
   };
@@ -70,7 +66,6 @@ const Home = () => {
   
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
       <section className="bg-gradient-to-r from-primary/90 to-primary/70 text-white py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center">
@@ -106,7 +101,6 @@ const Home = () => {
       
       <InstallPrompt />
       
-      {/* Search Section */}
       <section className="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between bg-white rounded-lg p-2 shadow-sm">
@@ -123,7 +117,6 @@ const Home = () => {
         </div>
       </section>
       
-      {/* Events Section */}
       <section className="py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between mb-8">
@@ -131,9 +124,10 @@ const Home = () => {
               <h2 className="text-2xl font-bold text-gray-900">Upcoming Events</h2>
               <p className="text-gray-600 mt-1">Don't miss out on the latest happenings</p>
             </div>
-            <Button asChild variant="outline">
-              <Link to="/events">
+            <Button asChild variant="outline" className="group">
+              <Link to="/upcoming-events" className="flex items-center">
                 View All
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
             </Button>
           </div>
@@ -177,7 +171,7 @@ const Home = () => {
                 <p className="text-gray-600 mb-4">Check back later for new events.</p>
                 {currentUser && (
                   <Button asChild>
-                    <Link to="/admin/events/new">Create an Event</Link>
+                    <Link to="/events/add">Create an Event</Link>
                   </Button>
                 )}
               </div>
@@ -186,7 +180,6 @@ const Home = () => {
         </div>
       </section>
       
-      {/* Clubs Section */}
       <section className="py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between mb-8">
@@ -194,9 +187,10 @@ const Home = () => {
               <h2 className="text-2xl font-bold text-gray-900">Featured Clubs</h2>
               <p className="text-gray-600 mt-1">Discover and join active campus clubs</p>
             </div>
-            <Button asChild variant="outline">
-              <Link to="/clubs">
+            <Button asChild variant="outline" className="group">
+              <Link to="/featured-clubs" className="flex items-center">
                 View All
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
             </Button>
           </div>
@@ -236,7 +230,7 @@ const Home = () => {
                 <p className="text-gray-600 mb-4">Check back later for clubs to join.</p>
                 {currentUser && (
                   <Button asChild>
-                    <Link to="/admin/clubs/new">Create a Club</Link>
+                    <Link to="/clubs/add">Create a Club</Link>
                   </Button>
                 )}
               </div>
@@ -245,7 +239,6 @@ const Home = () => {
         </div>
       </section>
       
-      {/* Notices Section */}
       <section className="py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between mb-8">
@@ -253,9 +246,10 @@ const Home = () => {
               <h2 className="text-2xl font-bold text-gray-900">Latest Notices</h2>
               <p className="text-gray-600 mt-1">Stay updated with important announcements</p>
             </div>
-            <Button asChild variant="outline">
-              <Link to="/notices">
+            <Button asChild variant="outline" className="group">
+              <Link to="/latest-notices" className="flex items-center">
                 View All
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
             </Button>
           </div>
@@ -290,7 +284,7 @@ const Home = () => {
                 <p className="text-gray-600 mb-4">Check back later for important notices.</p>
                 {currentUser && (
                   <Button asChild>
-                    <Link to="/admin/notices/new">Create a Notice</Link>
+                    <Link to="/notices/add">Create a Notice</Link>
                   </Button>
                 )}
               </div>
@@ -299,7 +293,6 @@ const Home = () => {
         </div>
       </section>
       
-      {/* Features Section */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
