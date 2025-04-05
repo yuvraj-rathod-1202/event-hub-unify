@@ -86,6 +86,48 @@ const ClubList = ({ clubs, onClubUpdate }) => {
       });
     }
   };
+
+  const handleLeaveClub = async (clubId) => {
+    if (!currentUser) {
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to leave clubs.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    try {
+      const club = clubs.find(c => c.id === clubId);
+      
+      if (!club) {
+        throw new Error('Club not found');
+      }
+      
+      await leaveClub(clubId, currentUser.uid);
+      
+      toast({
+        title: "Success",
+        description: `You have left ${club.name}.`,
+      });
+      
+      setClubMemberships(prev => ({
+        ...prev,
+        [clubId]: false
+      }));
+      
+      if (onClubUpdate) {
+        onClubUpdate();
+      }
+    } catch (error) {
+      console.error('Error leaving club:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to leave the club. Please try again.",
+        variant: "destructive"
+      });
+    }
+  }
   
   const handleSaveClub = (clubId) => {
     if (!currentUser) {
@@ -137,6 +179,8 @@ const ClubList = ({ clubs, onClubUpdate }) => {
           isMember={clubMemberships[club.id]}
           onSave={handleSaveClub}
           isSaved={savedClubs[club.id]}
+          coordinatorName={club.coordinatorId}
+          onLeave={handleLeaveClub} // Assuming this is part of the club data
         />
       ))}
     </div>

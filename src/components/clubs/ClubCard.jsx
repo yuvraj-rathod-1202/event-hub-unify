@@ -1,17 +1,16 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Users, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-const ClubCard = ({ club, onJoin, onLeave,isMember, onSave, isSaved }) => {
+const ClubCard = ({ club, onJoin, onLeave, isMember, onSave, isSaved, coordinatorName }) => {
   const [isHovered, setIsHovered] = useState(false);
-  
+
   const getClubImage = () => {
     return club.logoUrl || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800';
   };
-  
+
   const getCategoryBadgeClass = (category) => {
     switch (category.toLowerCase()) {
       case 'technical':
@@ -26,9 +25,9 @@ const ClubCard = ({ club, onJoin, onLeave,isMember, onSave, isSaved }) => {
         return 'general-badge';
     }
   };
-  
+
   return (
-    <div 
+    <div
       className="club-card relative"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -45,9 +44,9 @@ const ClubCard = ({ club, onJoin, onLeave,isMember, onSave, isSaved }) => {
           />
         </div>
       </Link>
-      
+
       <div className="absolute top-4 right-4">
-        <button 
+        <button
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -61,7 +60,7 @@ const ClubCard = ({ club, onJoin, onLeave,isMember, onSave, isSaved }) => {
           <Heart className={cn("h-5 w-5", isSaved && "fill-current")} />
         </button>
       </div>
-      
+
       <div className="p-4">
         <div className="flex justify-between items-start mb-2">
           <div>
@@ -70,24 +69,30 @@ const ClubCard = ({ club, onJoin, onLeave,isMember, onSave, isSaved }) => {
             </span>
           </div>
         </div>
-        
+
         <Link to={`/clubs/${club.id}`}>
           <h3 className="text-lg font-semibold mb-2 hover:text-primary transition-colors">
             {club.name}
           </h3>
         </Link>
-        
+
         <p className="text-gray-600 text-sm mb-4 line-clamp-2">
           {club.description}
         </p>
-        
+
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center text-gray-600 text-sm">
             <Users className="h-4 w-4 mr-2 text-gray-400" />
             <span>{club.members?.length || 0} members</span>
           </div>
         </div>
-        
+
+        {coordinatorName && (
+          <p className="text-gray-600 text-sm mb-2">
+            Coordinator: {coordinatorName}
+          </p>
+        )}
+
         <Button
           onClick={(e) => {
             e.preventDefault();

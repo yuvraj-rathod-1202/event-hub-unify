@@ -1,5 +1,4 @@
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -24,6 +23,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Card, CardContent } from '@/components/ui/card';
+import { useAuth } from '@/context/AuthContext'; // Import useAuth
+import { getAllUsers } from '../../services/userService';
 
 // Club form validation schema
 const clubFormSchema = z.object({
@@ -33,6 +34,7 @@ const clubFormSchema = z.object({
   contactEmail: z.string().email({ message: "Please enter a valid email address" }),
   meetingLocation: z.string().min(3, { message: "Meeting location is required" }),
   socialLinks: z.string().optional(),
+  coordinatorId: z.string().optional(), // Add coordinatorId to schema
 });
 
 const categories = [
@@ -44,9 +46,11 @@ const categories = [
 ];
 
 const ClubForm = ({ onSubmit, isLoading, club }) => {
+  const { currentUser } = useAuth(); // Get currentUser
   const [logoFile, setLogoFile] = useState(null);
   const [logoPreview, setLogoPreview] = useState(club?.logoUrl || null);
-  
+  const [users, setUsers] = useState([]); // Add users state
+
   // Initialize form with default values or existing club data
   const form = useForm({
     resolver: zodResolver(clubFormSchema),
@@ -57,30 +61,45 @@ const ClubForm = ({ onSubmit, isLoading, club }) => {
       contactEmail: club?.contactEmail || '',
       meetingLocation: club?.meetingLocation || '',
       socialLinks: club?.socialLinks || '',
+      coordinatorId: club?.coordinatorId || '', // Initialize coordinatorId
     },
   });
-  
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const usersData = await getAllUsers();
+        console.log('Fetched users:', usersData); // Log fetched users
+        setUsers(usersData);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
   const handleLogoChange = (e) => {
     const file = e.target.files[0];
-    
+
     if (file) {
       setLogoFile(file);
-      
+
       // Create a preview URL
       const previewUrl = URL.createObjectURL(file);
       setLogoPreview(previewUrl);
     }
   };
-  
+
   const handleRemoveLogo = () => {
     setLogoFile(null);
     setLogoPreview(null);
   };
-  
+
   const handleFormSubmit = (data) => {
     onSubmit(data, logoFile);
   };
-  
+
   return (
     <Card>
       <CardContent className="pt-6">
@@ -92,9 +111,9 @@ const ClubForm = ({ onSubmit, isLoading, club }) => {
               <div className="mt-2">
                 {logoPreview ? (
                   <div className="relative w-40 h-40 rounded-lg overflow-hidden">
-                    <img 
-                      src={logoPreview} 
-                      alt="Club Logo Preview" 
+                    <img
+                      src={logoPreview}
+                      alt="Club Logo Preview"
                       className="w-full h-full object-cover"
                     />
                     <button
@@ -151,8 +170,8 @@ const ClubForm = ({ onSubmit, isLoading, club }) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Category</FormLabel>
-                  <Select 
-                    onValueChange={field.onChange} 
+                  <Select
+                    onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
@@ -181,10 +200,10 @@ const ClubForm = ({ onSubmit, isLoading, club }) => {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea 
-                      placeholder="Enter club description" 
-                      className="min-h-[120px]" 
-                      {...field} 
+                    <Textarea
+                      placeholder="Enter club description"
+                      className="min-h-[120px]"
+                      {...field}
                     />
                   </FormControl>
                   <FormDescription>
@@ -233,14 +252,42 @@ const ClubForm = ({ onSubmit, isLoading, club }) => {
                 <FormItem>
                   <FormLabel>Social Media Links (Optional)</FormLabel>
                   <FormControl>
-                    <Textarea 
-                      placeholder="Instagram, Twitter, Facebook, etc." 
-                      {...field} 
+                    <Textarea
+                      placeholder="Instagram, Twitter, Facebook, etc."
+                      {...field}
                     />
                   </FormControl>
                   <FormDescription>
                     Add one link per line (Instagram, Twitter, Facebook, etc.)
                   </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* Club Coordinator */}
+            <FormField
+              control={form.control}
+              name="coordinatorId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Club Coordinator</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a coordinator" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {users.map((user) => (
+                        <SelectItem key={user.uid} value={user.displayName}>
+                          {user.email} ({user.displayName})
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}

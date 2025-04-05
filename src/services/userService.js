@@ -5,9 +5,28 @@ import {
   updateDoc,
   arrayUnion,
   arrayRemove,
-  serverTimestamp
+  serverTimestamp,
+  getDocs,
+  collection
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
+
+export const getAllUsers = async () => {
+  try {
+    const usersCollection = collection(db, 'users');
+    const usersSnapshot = await getDocs(usersCollection);
+    
+    const users = usersSnapshot.docs.map((doc) => ({
+      uid: doc.id,
+      ...doc.data()
+    }));
+    
+    return users;
+  } catch (error) {
+    console.error('Error getting all users:', error);
+    throw error;
+  }
+};
 
 // Get user data
 export const getUserData = async (userId) => {

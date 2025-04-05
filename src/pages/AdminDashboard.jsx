@@ -110,21 +110,21 @@ const AdminDashboard = () => {
             
             <div className="flex flex-wrap gap-3 mt-4 md:mt-0">
               <Button asChild>
-                <Link to="/admin/events/new">
+                <Link to="/events/add">
                   <PlusCircle className="h-4 w-4 mr-2" />
                   Create Event
                 </Link>
               </Button>
               
               <Button asChild variant="outline">
-                <Link to="/admin/clubs/new">
+                <Link to="/clubs/add">
                   <PlusCircle className="h-4 w-4 mr-2" />
                   Create Club
                 </Link>
               </Button>
               
               <Button asChild variant="outline">
-                <Link to="/admin/notices/new">
+                <Link to="/notices/add">
                   <PlusCircle className="h-4 w-4 mr-2" />
                   Create Notice
                 </Link>
