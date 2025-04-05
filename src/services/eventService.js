@@ -56,7 +56,7 @@ export const getAllEvents = async (filterCategory = null, userLimit = 50) => {
     return events;
   } catch (error) {
     console.error('Error getting events:', error);
-    if(navigator.offline){
+    if(!navigator.onLine){
       const clubs = JSON.parse(localStorage.getItem('events'));
       if(clubs && clubs.length > 0){
         return clubs;
