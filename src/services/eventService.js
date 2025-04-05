@@ -52,11 +52,20 @@ export const getAllEvents = async (filterCategory = null, userLimit = 50) => {
         eventDate: doc.data().eventDate?.toDate(),
       });
     });
-
+    localStorage.setItem('events', JSON.stringify(events)); // Store events in local storage
     return events;
   } catch (error) {
     console.error('Error getting events:', error);
-    throw error;
+    if(navigator.offline){
+      const clubs = JSON.parse(localStorage.getItem('events'));
+      if(clubs && clubs.length > 0){
+        return clubs;
+      } else {
+        return [];
+      }
+    }else{
+      throw error;
+    }
   }
 };
 
