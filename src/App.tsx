@@ -32,6 +32,9 @@ import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 import CreateNotice from "./pages/CreateNotice";
 import NoticeDetails from "./pages/NoticeDetail";
+import EditClub from "./pages/EditClub";
+import EditNotice from "./pages/EditNotices";
+import EditEvent from "./pages/EditEvent";
 
 const queryClient = new QueryClient();
 
@@ -73,6 +76,9 @@ const App = () => (
                   
                   {/* Admin Dashboard */}
                   <Route path="/admin" element={<AdminDashboard />} />
+                  <Route path="/admin/clubs/edit/:clubId" element={<EditClub />} />
+                  <Route path="/admin/notices/edit/:noticeId" element={<EditNotice />} />
+                  <Route path="/admin/events/edit/:eventId" element={<EditEvent />} />
                   
                   {/* Catch-all route */}
                   <Route path="*" element={<NotFound />} />

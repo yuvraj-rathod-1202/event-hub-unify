@@ -45,7 +45,7 @@ const categories = [
   { id: 'sports', name: 'Sports' },
 ];
 
-const ClubForm = ({ onSubmit, isLoading, club }) => {
+const ClubForm = ({ onSubmit, isLoading, club, isupdate=false }) => {
   const { currentUser } = useAuth(); // Get currentUser
   const [logoFile, setLogoFile] = useState(null);
   const [logoPreview, setLogoPreview] = useState(club?.logoUrl || null);
@@ -299,12 +299,11 @@ const ClubForm = ({ onSubmit, isLoading, club }) => {
                 {isLoading ? (
                   <>
                     <div className="h-4 w-4 rounded-full border-2 border-current border-r-transparent animate-spin" />
-                    Creating...
+                    Updating...
                   </>
                 ) : (
                   <>
-                    <Plus className="h-4 w-4" />
-                    Create Club
+                    Update
                   </>
                 )}
               </Button>

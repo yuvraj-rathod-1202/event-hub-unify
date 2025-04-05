@@ -112,23 +112,26 @@ const EventDetails = () => {
     });
   };
   
-  const handleShare = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: event.title,
-        text: `Check out this event: ${event.title}`,
-        url: window.location.href
-      })
-      .then(() => console.log('Shared successfully'))
-      .catch((error) => console.error('Error sharing:', error));
+  const handleShare = async () => {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      try {
+        const permission = await navigator.permissions.query({ name: 'clipboard-write' });
+        if (permission.state === 'granted' || permission.state === 'prompt') {
+          await navigator.clipboard.writeText(window.location.href);
+          console.log('Copied to clipboard');
+        } else {
+          console.error('Clipboard permission denied.');
+          alert('Clipboard permission denied.');
+        }
+      } catch (error) {
+        console.error('Failed to query clipboard permissions:', error);
+        await navigator.clipboard.writeText(window.location.href);
+        console.log('Copied to clipboard');
+      }
+  
     } else {
-      // Fallback: copy to clipboard
-      navigator.clipboard.writeText(window.location.href);
-      
-      toast({
-        title: "Link copied",
-        description: "Event link copied to clipboard.",
-      });
+      console.error('Clipboard API not supported in this browser.');
+      alert('Please copy the URL manually: ' + window.location.href);
     }
   };
   

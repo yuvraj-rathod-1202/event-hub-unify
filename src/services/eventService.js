@@ -13,7 +13,8 @@ import {
   arrayUnion,
   arrayRemove, // Import startAfter for pagination
 } from 'firebase/firestore';
-import { db } from '../firebase/config';
+import { db, storage } from '../firebase/config';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 const EVENTS_COLLECTION = 'events';
 const MAX_LIMIT = 100;
@@ -182,15 +183,55 @@ export const getEventById = async (eventId) => {
   }
 }
 
-export const createEvent = async (eventData) => {
+export const createEvent = async (eventData, posterfile) => {
   try {
     const eventRef = await addDoc(collection(db, EVENTS_COLLECTION), {
       ...eventData,
       eventDate: new Date(eventData.eventDate),
+      registeredUsers: [],
     });
+
+    // Handle file upload if needed
+    if (posterfile) {
+      const storageRef = ref(storage, `events/${eventRef.id}/poster`);
+      await uploadBytes(storageRef, posterfile);
+
+      // Optionally, you can get the download URL and update the event document
+      const downloadURL = await getDownloadURL(storageRef);
+      await updateDoc(eventRef, {
+        posterUrl: downloadURL,
+      });
+    }
+
     return eventRef.id;
   } catch (error) {
     console.error('Error creating event:', error);
+    throw error;
+  }
+}
+
+export const updateEvent = async (eventId, eventData, posterfile) => {
+  try {
+    const eventRef = doc(db, EVENTS_COLLECTION, eventId);
+
+    await updateDoc(eventRef, {
+      ...eventData,
+      eventDate: new Date(eventData.eventDate),
+    });
+
+    // Handle file upload if needed
+    if (posterfile) {
+      const storageRef = ref(storage, `events/${eventId}/poster`);
+      await uploadBytes(storageRef, posterfile);
+
+      // Optionally, you can get the download URL and update the event document
+      const downloadURL = await getDownloadURL(storageRef);
+      await updateDoc(eventRef, {
+        posterUrl: downloadURL,
+      });
+    }
+  } catch (error) {
+    console.error('Error updating event:', error);
     throw error;
   }
 }

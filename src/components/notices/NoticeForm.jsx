@@ -7,13 +7,13 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { format } from 'date-fns';
 
-const NoticeForm = ({ onSubmit, isLoading }) => {
-  const [title, setTitle] = useState('');
-  const [club, setClub] = useState('');
-  const [position, setPosition] = useState('');
-  const [description, setDescription] = useState('');
-  const [deadline, setDeadline] = useState(undefined);
-  const [category, setCategory] = useState('');
+const NoticeForm = ({ onSubmit, isLoading, isupdate=false, notice={} }) => {
+  const [title, setTitle] = useState(notice?.title);
+  const [club, setClub] = useState(notice?.club);
+  const [position, setPosition] = useState(notice?.position);
+  const [description, setDescription] = useState(notice?.description);
+  const [deadline, setDeadline] = useState(format(notice?.deadline.toDate(), "yyyy-MM-dd") || null);
+  const [category, setCategory] = useState(notice?.category || '');
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -74,7 +74,7 @@ const NoticeForm = ({ onSubmit, isLoading }) => {
         </select>
       </div>
       <Button type="submit" disabled={isLoading}>
-        {isLoading ? "Creating..." : "Create Notice"}
+        {isLoading  ? "Creating..." : !isupdate ? "Create Notice" : "Update Notice"}
       </Button>
     </form>
   );
