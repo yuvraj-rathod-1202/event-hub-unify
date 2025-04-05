@@ -1,73 +1,85 @@
-# Welcome to your Lovable project
+# Notification System Project README
 
-## Project info
+## This Progressive Web App is live at [https://event-hub-unify.vercel.app/](https://event-hub-unify.vercel.app/)
 
-**URL**: https://lovable.dev/projects/5799c86d-548c-4fd6-af87-3c9d40d2e9a5
+## Overview
 
-## How can I edit this code?
+This project implements a notification system using React, Firebase, and Tailwind CSS. It allows users to receive and send notifications within a dashboard environment.
 
-There are several ways of editing your application.
+## Technologies Used
 
-**Use Lovable**
+* **React:** A JavaScript library for building user interfaces.
+* **Firebase:** A backend-as-a-service platform for user authentication, data storage (Firestore), and more.
+* **Tailwind CSS:** A utility-first CSS framework for styling.
+* **Lucide React:** A library of beautiful SVG icons.
+* **date-fns:** A modern JavaScript date utility library.
+* **react-router-dom:** For client-side routing.
+* **@/components/ui:** Custom UI components built with Radix UI and Tailwind CSS.
+* **@/context/AuthContext:** Custom authentication context.
+* **@/services/notificationService:** Custom service for interacting with notifications in Firebase.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/5799c86d-548c-4fd6-af87-3c9d40d2e9a5) and start prompting.
+## Project Structure
 
-Changes made via Lovable will be committed automatically to this repo.
+notification-system/
+├── public/
+│   └── index.html
+├── src/
+│   ├── components/
+│   │   ├── ui/
+│   │   │   ├── button.jsx
+│   │   │   ├── input.jsx
+│   │   │   ├── select.jsx
+│   │   │   ├── use-toast.jsx
+│   │   │   └── ... (other UI components)
+│   │   └── ... (other components)
+│   ├── context/
+│   │   └── AuthContext.jsx
+│   ├── pages/
+│   │   ├── Notifications.jsx
+│   │   └── SendNotification.jsx
+│   ├── services/
+│   │   └── notificationService.js
+│   ├── firebase.js
+│   ├── main.jsx          // Entry point of the React application
+│   ├── App.jsx           // Main App component with routing
+│   ├── index.css         // Global CSS styles
+│   ├── assets/           // Images, icons, or other static assets
+│   │   └── ...
+│   └── ... (other source files)
+├── package.json
+├── package-lock.json
+├── README.md
+├── .gitignore
+├── vite.config.js       // Vite configuration, if using Vite
+└── tsconfig.json      // TypeScript configuration
 
-**Use your preferred IDE**
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Setup Instructions
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+1.  **Clone the repository:**
 
-Follow these steps:
+    ```bash
+    git clone [repository URL]
+    cd [project directory]
+    ```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+2.  **Install dependencies:**
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+    ```bash
+    npm install
+    ```
 
-# Step 3: Install the necessary dependencies.
-npm i
+3.  **Configure Firebase:**
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+    * Create a Firebase project on the Firebase console.
+    * Enable Firestore and Authentication.
+    * Copy your Firebase configuration object into `src/firebase/config.js`.
 
-**Edit a file directly in GitHub**
+4.  **Run the application:**
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+    ```bash
+    npm run dev
+    ```
 
-**Use GitHub Codespaces**
+.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/5799c86d-548c-4fd6-af87-3c9d40d2e9a5) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes it is!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
