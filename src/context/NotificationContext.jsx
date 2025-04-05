@@ -1,9 +1,10 @@
 
 import { createContext, useContext, useEffect, useState } from 'react';
 import { getToken, onMessage } from 'firebase/messaging';
-import { initializeMessaging } from '../firebase/config';
+import { db, initializeMessaging } from '../firebase/config';
 import { useAuth } from './AuthContext';
 import { toast } from '@/components/ui/use-toast';
+import { doc, setDoc } from 'firebase/firestore';
 
 const NotificationContext = createContext();
 
@@ -45,6 +46,14 @@ export const NotificationProvider = ({ children }) => {
     
     initFCM();
   }, []);
+
+  const saveTokenToFirestore = async (uid, token) => {
+    try {
+      await setDoc(doc(db, 'fcmTokens', uid), { token }, { merge: true });
+    } catch (error) {
+      console.error('Error saving token to Firestore:', error);
+    }
+  };
   
   // Request permission and get FCM token
   const requestNotificationPermission = async () => {
@@ -65,6 +74,9 @@ export const NotificationProvider = ({ children }) => {
         
         if (token) {
           setFcmToken(token);
+          if(currentUser?.uid) {
+            await saveTokenToFirestore(currentUser.uid, token);
+          }
           return true;
         }
       }

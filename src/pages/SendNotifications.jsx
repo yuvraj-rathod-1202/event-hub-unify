@@ -7,6 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from '@/components/ui/use-toast';
 import { ArrowLeft, Send } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../firebase/config';
 
 const SendNotification = () => {
   const { currentUser } = useAuth();
@@ -33,6 +35,24 @@ const SendNotification = () => {
     fetchUsers();
   }, []);
 
+  const getUserFcmToken = async (uid) => {
+    const docSnap = await getDoc(doc(db, 'fcmTokens', uid));
+    return docSnap.exists() ? docSnap.data().token : null;
+  };
+
+  const sendNotification = async (receiverFcmToken, title, body, customData = {}) => {
+    if (!receiverFcmToken) {
+      console.error('FCM token is required to send a notification');
+      return;
+    }
+  
+    await sendNotificationToUserPhone(receiverFcmToken, {
+      title,
+      body
+    }, customData);
+  };
+  
+
   const handleSend = async () => {
     if (!selectedUserId) {
       toast({ title: 'Warning', description: 'Please select a user.', variant: 'destructive' });
@@ -46,6 +66,8 @@ const SendNotification = () => {
     setIsSending(true);
     try {
       await sendNotificationToUser(selectedUserId, message, currentUser.email);
+      const token = await getUserFcmToken(selectedUserId);
+        await sendNotification(token, 'New Message', 'You have a new message from ' + currentUser.email + ': ' + message.substring(0, 50) + '...');
       toast({ title: 'Success', description: 'Notification sent.' });
       navigate('/notifications');
     } catch (error) {
