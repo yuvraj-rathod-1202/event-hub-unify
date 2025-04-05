@@ -45,7 +45,7 @@ const SendNotification = () => {
 
     setIsSending(true);
     try {
-      await sendNotificationToUser(selectedUserId, message);
+      await sendNotificationToUser(selectedUserId, message, currentUser.uid);
       toast({ title: 'Success', description: 'Notification sent.' });
       navigate('/notifications');
     } catch (error) {
