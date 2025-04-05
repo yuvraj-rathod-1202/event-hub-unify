@@ -22,6 +22,7 @@ import EventDetails from "./pages/EventDetails";
 import AddEvent from "./pages/AddEvent";
 import UpcomingEvents from "./pages/UpcomingEvents";
 import Clubs from "./pages/Clubs";
+import CreateClub from "./pages/CreateClub";
 import FeaturedClubs from "./pages/FeaturedClubs";
 import Notices from "./pages/Notices";
 import LatestNotices from "./pages/LatestNotices";
@@ -54,6 +55,7 @@ const App = () => (
                   
                   {/* Club Routes */}
                   <Route path="/clubs" element={<Clubs />} />
+                  <Route path="/clubs/add" element={<CreateClub />} />
                   <Route path="/featured-clubs" element={<FeaturedClubs />} />
                   
                   {/* Notice Routes */}
