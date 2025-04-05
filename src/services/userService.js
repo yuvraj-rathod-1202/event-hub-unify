@@ -47,16 +47,20 @@ export const getUserData = async (userId) => {
   }
 };
 
-export const CompareRef = async (registeredUsers, userId) => {
-  const userRef = doc(db, 'users', userId);
+export const CompareRef = (registeredUsers, userId) => {
+  // const userRef = doc(db, 'users', userId);
 
-  if (!registeredUsers) {
-    return false; // Handle cases where registeredUsers is null/undefined
-  }
+  // if (!registeredUsers) {
+  //   return false; // Handle cases where registeredUsers is null/undefined
+  // }
 
-  return registeredUsers.some((user) => {
-    return user.isEqual(userRef); // Use isEqual() for comparison
-  });
+  // return registeredUsers.some((user) => {
+  //   return user.isEqual(userRef); // Use isEqual() for comparison
+  // });
+  // const compare = userId && registeredUsers.some((user) => user.uid === "/users/"+userId);
+  const compare = registeredUsers.some((user) => user.id === userId);
+  console.log("compare", compare);
+  return compare;
 };
 
 // Update user profile

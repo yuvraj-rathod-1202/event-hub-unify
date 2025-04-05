@@ -14,6 +14,7 @@ import { registerServiceWorker } from '@/utils/pwaUtils';
 import { CompareRef, getUserData } from '../services/userService';
 import { joinClub, leaveClub } from '../services/clubService';
 import { saveNoticeForUser, unsaveNoticeForUser } from '../services/noticeService';
+import { registerForEvent } from '../services/eventService';
 
 
 const Home = () => {
@@ -59,7 +60,10 @@ const Home = () => {
   const isNoticeSaved = (noticeId) => savedNotices.includes(noticeId);
   
   const handleRegisterEvent = (eventId) => {
-    console.log('Register for event:', eventId);
+    registerForEvent(eventId, currentUser.uid)
+      .then(() => {
+        console.log('Registered for event:', eventId);
+      })
   };
   
   const handleSaveEvent = (eventId) => {
