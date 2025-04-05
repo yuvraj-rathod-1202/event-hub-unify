@@ -15,13 +15,15 @@ export default defineConfig(({ mode }) => ({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: 'My Awesome App',
-        short_name: 'AwesomeApp',
+        name: 'HackRush25',
+        short_name: 'HackRush',
         description: 'A cool progressive web app made with React + Vite',
         theme_color: '#ffffff',
         background_color: '#ffffff',
         display: 'standalone',
         start_url: '/',
+        id: '/',
+        orientation: 'portrait',
         icons: [
           {
             src: 'icons/icon-192x192.png',
@@ -32,8 +34,39 @@ export default defineConfig(({ mode }) => ({
             src: 'icons/icon-512x512.png',
             sizes: '512x512',
             type: 'image/png'
+          },
+        ],
+        screenshots: [
+          {
+            src: 'screenshots/screenshot1.png',
+            sizes: '1280x720',
+            type: 'image/png'
+          },
+          {
+            src: 'screenshots/screenshot2.png',
+            sizes: '1280x720',
+            type: 'image/png'
           }
-        ]
+        ],
+        display_override: ["window-controls-overlay", "standalone"],
+        edge_side_panel: {
+          "preferred_width": 320,
+        },
+        file_handlers: [
+          {
+            action: "/open",
+            accept: {
+              "application/json": [".json"],
+              "text/plain": [".txt"]
+            }
+          }
+        ],
+        protocol_handlers: [
+          {
+            protocol: "web+myapp",
+            url: "/?q=%s"
+          }
+        ],
       }
     }),
     mode === 'development' &&
