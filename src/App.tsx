@@ -30,6 +30,8 @@ import LatestNotices from "./pages/LatestNotices";
 import UserDashboard from "./pages/UserDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
+import CreateNotice from "./pages/CreateNotice";
+import NoticeDetails from "./pages/NoticeDetail";
 
 const queryClient = new QueryClient();
 
@@ -63,6 +65,8 @@ const App = () => (
                   {/* Notice Routes */}
                   <Route path="/notices" element={<Notices />} />
                   <Route path="/latest-notices" element={<LatestNotices />} />
+                  <Route path="/notices/add" element={<CreateNotice />} />
+                  <Route path="/notices/:noticeId" element={<NoticeDetails />} />
                   
                   {/* User Dashboard */}
                   <Route path="/dashboard" element={<UserDashboard />} />
