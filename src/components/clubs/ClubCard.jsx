@@ -5,7 +5,7 @@ import { Users, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-const ClubCard = ({ club, onJoin, isMember, onSave, isSaved }) => {
+const ClubCard = ({ club, onJoin, onLeave,isMember, onSave, isSaved }) => {
   const [isHovered, setIsHovered] = useState(false);
   
   const getClubImage = () => {
@@ -92,7 +92,11 @@ const ClubCard = ({ club, onJoin, isMember, onSave, isSaved }) => {
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            onJoin(club.id);
+            if (isMember) {
+              onLeave(club.id);
+            } else {
+              onJoin(club.id);
+            }
           }}
           className="w-full"
           variant={isMember ? "outline" : "default"}

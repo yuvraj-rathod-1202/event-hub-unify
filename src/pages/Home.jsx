@@ -12,6 +12,7 @@ import NoticeCard from '@/components/notices/NoticeCard';
 import InstallPrompt from '@/components/common/InstallPrompt';
 import { registerServiceWorker } from '@/utils/pwaUtils';
 import { CompareRef } from '../services/userService';
+import { joinClub, leaveClub } from '../services/clubService';
 
 
 const Home = () => {
@@ -62,7 +63,24 @@ const Home = () => {
   };
   
   const handleJoinClub = (clubId) => {
-    console.log('Join club:', clubId);
+    joinClub(clubId, currentUser.uid)
+      .then(() => {
+        console.log('Joined club:', clubId);
+      })
+      .catch((error) => {
+        console.error('Error joining club:', error);
+      });
+  };
+
+  const handleLeaveClub = (clubId) => {
+    leaveClub(clubId, currentUser.uid)
+      .then(() => {
+        console.log('Left club:', clubId);
+        
+      })
+      .catch((error) => {
+        console.error('Error leaving club:', error);
+      });
   };
   
   const handleSaveClub = (clubId) => {
@@ -246,8 +264,9 @@ const Home = () => {
                     key={club.id}
                     club={club}
                     onJoin={handleJoinClub}
-                    isMember={false}
+                    isMember={club.members.includes(currentUser?.uid)}
                     onSave={handleSaveClub}
+                    onLeave={handleLeaveClub}
                     isSaved={false}
                   />
                 ))}

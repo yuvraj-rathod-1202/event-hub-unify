@@ -30,11 +30,15 @@ export const getUserData = async (userId) => {
 
 export const CompareRef = async (registeredUsers, userId) => {
   const userRef = doc(db, 'users', userId);
-  
-  registeredUsers?.some((user) => {
-    return user == userRef;
-  })
-}
+
+  if (!registeredUsers) {
+    return false; // Handle cases where registeredUsers is null/undefined
+  }
+
+  return registeredUsers.some((user) => {
+    return user.isEqual(userRef); // Use isEqual() for comparison
+  });
+};
 
 // Update user profile
 export const updateUserProfile = async (userId, profileData) => {
