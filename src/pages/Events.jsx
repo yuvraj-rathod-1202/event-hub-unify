@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
@@ -16,7 +15,7 @@ const Events = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || '');
-  
+
   const categories = [
     'All',
     'Technical',
@@ -24,70 +23,86 @@ const Events = () => {
     'Sports',
     'Academic'
   ];
-  
+
   useEffect(() => {
     const fetchEvents = async () => {
       setLoading(true);
-      
+
       try {
         // Try to get cached data first
         const cachedEvents = getCachedData('events');
-        
+
         if (cachedEvents) {
           console.log('Using cached events data');
-          setEvents(cachedEvents);
+
+          // Apply category filter to cached data
+          const filteredCached = selectedCategory === 'All' || !selectedCategory
+            ? cachedEvents
+            : cachedEvents.filter(event => event.category === selectedCategory);
+
+          setEvents(filteredCached);
           setLoading(false);
         }
-        
+
         // Fetch fresh data
         const category = selectedCategory === 'All' ? null : selectedCategory;
         const eventsData = await getAllEvents(category);
-        
+
         setEvents(eventsData);
-        
+
         // Cache data for offline use
         cacheDataForOffline('events', eventsData);
       } catch (error) {
         console.error('Error fetching events:', error);
-        
+
         // If we have cached data and an error occurred, we can still use the cached data
         const cachedEvents = getCachedData('events');
         if (cachedEvents && events.length === 0) {
           console.log('Using cached events data after error');
-          setEvents(cachedEvents);
+
+          // Apply category filter to cached data
+          const filteredCached = selectedCategory === 'All' || !selectedCategory
+            ? cachedEvents
+            : cachedEvents.filter(event => event.category === selectedCategory);
+
+          setEvents(filteredCached);
         }
       } finally {
         setLoading(false);
       }
     };
-    
+
     fetchEvents();
   }, [selectedCategory]);
-  
+
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
-    
+
     if (category === 'All') {
       searchParams.delete('category');
     } else {
       searchParams.set('category', category);
     }
-    
+
     setSearchParams(searchParams);
   };
-  
+
   const handleSearch = (e) => {
     e.preventDefault();
     // Simple client-side filtering for now
-    // In a real app, this would likely be a server-side search
     console.log('Searching for:', searchTerm);
   };
-  
-  const filteredEvents = events.filter(event => 
+
+  const filteredEvents = events.filter(event =>
     event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     (event.description && event.description.toLowerCase().includes(searchTerm.toLowerCase()))
   );
-  
+
+  // Apply category filter to filtered events
+  const categorizedEvents = selectedCategory === 'All' || !selectedCategory
+    ? filteredEvents
+    : filteredEvents.filter(event => event.category === selectedCategory);
+
   return (
     <div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -97,7 +112,7 @@ const Events = () => {
             <p className="text-gray-600 mt-1">Discover and register for upcoming events</p>
           </div>
         </div>
-        
+
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="relative flex-1">
@@ -117,7 +132,7 @@ const Events = () => {
                 </Button>
               </form>
             </div>
-            
+
             <div className="flex space-x-2 overflow-x-auto pb-2 hide-scrollbar">
               {categories.map(category => (
                 <Button
@@ -132,7 +147,7 @@ const Events = () => {
             </div>
           </div>
         </div>
-        
+
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(6)].map((_, index) => (
@@ -150,15 +165,15 @@ const Events = () => {
               </div>
             ))}
           </div>
-        ) : filteredEvents.length > 0 ? (
-          <EventList events={filteredEvents} />
+        ) : categorizedEvents.length > 0 ? (
+          <EventList events={categorizedEvents} />
         ) : (
           <div className="text-center py-16">
             <Calendar className="h-16 w-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-xl font-medium text-gray-900 mb-2">No events found</h3>
             <p className="text-gray-600 mb-4">
-              {selectedCategory 
-                ? `No ${selectedCategory.toLowerCase()} events are currently available.` 
+              {selectedCategory
+                ? `No ${selectedCategory.toLowerCase()} events are currently available.`
                 : "No events match your search criteria."}
             </p>
             {currentUser && (

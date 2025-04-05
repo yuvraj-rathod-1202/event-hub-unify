@@ -39,11 +39,8 @@ const categories = [
   { id: 'academic', name: 'Academic' },
   { id: 'cultural', name: 'Cultural' },
   { id: 'sports', name: 'Sports' },
-  { id: 'technology', name: 'Technology' },
-  { id: 'arts', name: 'Arts' },
-  { id: 'community', name: 'Community Service' },
-  { id: 'professional', name: 'Professional' },
-  { id: 'other', name: 'Other' },
+  { id: 'technical', name: 'Technical' },
+  { id: 'sports', name: 'Sports' },
 ];
 
 const ClubForm = ({ onSubmit, isLoading, club }) => {

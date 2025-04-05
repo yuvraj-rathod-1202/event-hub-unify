@@ -1,6 +1,5 @@
-
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { getAllNotices } from '@/services/noticeService';
 import { Button } from '@/components/ui/button';
@@ -16,7 +15,8 @@ const Notices = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || '');
-  
+  const navigate = useNavigate();
+
   const categories = [
     'All',
     'Academic',
@@ -25,69 +25,73 @@ const Notices = () => {
     'Deadline',
     'General'
   ];
-  
+
   useEffect(() => {
     const fetchNotices = async () => {
       setLoading(true);
-      
+
       try {
         // Try to get cached data first
         const cachedNotices = getCachedData('notices');
-        
+
         if (cachedNotices) {
           console.log('Using cached notices data');
-          setNotices(cachedNotices);
+          // Apply category filter to cached data
+          const filteredCached = selectedCategory === 'All' || !selectedCategory ? cachedNotices : cachedNotices.filter(notice => notice.category === selectedCategory);
+          setNotices(filteredCached);
           setLoading(false);
         }
-        
+
         // Fetch fresh data
         const category = selectedCategory === 'All' ? null : selectedCategory;
         const noticesData = await getAllNotices(category);
-        
+
         setNotices(noticesData);
-        
+
         // Cache data for offline use
         cacheDataForOffline('notices', noticesData);
       } catch (error) {
         console.error('Error fetching notices:', error);
-        
+
         // If we have cached data and an error occurred, we can still use the cached data
         const cachedNotices = getCachedData('notices');
         if (cachedNotices && notices.length === 0) {
           console.log('Using cached notices data after error');
-          setNotices(cachedNotices);
+          // Apply category filter to cached data
+          const filteredCached = selectedCategory === 'All' || !selectedCategory ? cachedNotices : cachedNotices.filter(notice => notice.category === selectedCategory);
+          setNotices(filteredCached);
         }
       } finally {
         setLoading(false);
       }
     };
-    
+
     fetchNotices();
   }, [selectedCategory]);
-  
+
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
-    
+
     if (category === 'All') {
       searchParams.delete('category');
     } else {
       searchParams.set('category', category);
     }
-    
+
     setSearchParams(searchParams);
   };
-  
+
   const handleSearch = (e) => {
     e.preventDefault();
     // Simple client-side filtering for now
     console.log('Searching for:', searchTerm);
   };
-  
-  const filteredNotices = notices.filter(notice => 
+
+  const filteredNotices = notices.filter(notice =>
     notice.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     (notice.content && notice.content.toLowerCase().includes(searchTerm.toLowerCase()))
   );
-  
+
   return (
     <div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -97,7 +101,7 @@ const Notices = () => {
             <p className="text-gray-600 mt-1">Stay updated with the latest announcements</p>
           </div>
         </div>
-        
+
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="relative flex-1">
@@ -117,7 +121,7 @@ const Notices = () => {
                 </Button>
               </form>
             </div>
-            
+
             <div className="flex space-x-2 overflow-x-auto pb-2 hide-scrollbar">
               {categories.map(category => (
                 <Button
@@ -132,7 +136,7 @@ const Notices = () => {
             </div>
           </div>
         </div>
-        
+
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(6)].map((_, index) => (
@@ -151,12 +155,12 @@ const Notices = () => {
             <BookOpen className="h-16 w-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-xl font-medium text-gray-900 mb-2">No notices found</h3>
             <p className="text-gray-600 mb-4">
-              {selectedCategory 
-                ? `No ${selectedCategory.toLowerCase()} notices are currently available.` 
+              {selectedCategory
+                ? `No ${selectedCategory.toLowerCase()} notices are currently available.`
                 : "No notices match your search criteria."}
             </p>
             {currentUser && (
-              <Button>
+              <Button onClick={() => navigate('/notices/create')}>
                 Create a Notice
               </Button>
             )}

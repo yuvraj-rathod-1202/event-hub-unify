@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
@@ -16,7 +15,7 @@ const Clubs = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || '');
-  
+
   const categories = [
     'All',
     'Technical',
@@ -24,69 +23,86 @@ const Clubs = () => {
     'Sports',
     'Academic'
   ];
-  
+
   useEffect(() => {
     const fetchClubs = async () => {
       setLoading(true);
-      
+
       try {
         // Try to get cached data first
         const cachedClubs = getCachedData('clubs');
-        
+
         if (cachedClubs) {
           console.log('Using cached clubs data');
-          setClubs(cachedClubs);
+
+          // Apply category filter to cached data
+          const filteredCached = selectedCategory === 'All' || !selectedCategory
+            ? cachedClubs
+            : cachedClubs.filter(club => club.category === selectedCategory);
+
+          setClubs(filteredCached);
           setLoading(false);
         }
-        
+
         // Fetch fresh data
         const category = selectedCategory === 'All' ? null : selectedCategory;
         const clubsData = await getAllClubs(category);
-        
+
         setClubs(clubsData);
-        
+
         // Cache data for offline use
         cacheDataForOffline('clubs', clubsData);
       } catch (error) {
         console.error('Error fetching clubs:', error);
-        
+
         // If we have cached data and an error occurred, we can still use the cached data
         const cachedClubs = getCachedData('clubs');
         if (cachedClubs && clubs.length === 0) {
           console.log('Using cached clubs data after error');
-          setClubs(cachedClubs);
+
+          // Apply category filter to cached data
+          const filteredCached = selectedCategory === 'All' || !selectedCategory
+            ? cachedClubs
+            : cachedClubs.filter(club => club.category === selectedCategory);
+
+          setClubs(filteredCached);
         }
       } finally {
         setLoading(false);
       }
     };
-    
+
     fetchClubs();
   }, [selectedCategory]);
-  
+
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
-    
+
     if (category === 'All') {
       searchParams.delete('category');
     } else {
       searchParams.set('category', category);
     }
-    
+
     setSearchParams(searchParams);
   };
-  
+
   const handleSearch = (e) => {
     e.preventDefault();
     // Simple client-side filtering for now
     console.log('Searching for:', searchTerm);
   };
-  
-  const filteredClubs = clubs.filter(club => 
+
+  const filteredClubs = clubs.filter(club =>
     club.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     (club.description && club.description.toLowerCase().includes(searchTerm.toLowerCase()))
   );
-  
+
+  // Apply category filter to filtered clubs
+  const categorizedClubs = selectedCategory === 'All' || !selectedCategory
+    ? filteredClubs
+    : filteredClubs.filter(club => club.category === selectedCategory);
+
   return (
     <div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -96,7 +112,7 @@ const Clubs = () => {
             <p className="text-gray-600 mt-1">Discover and join campus clubs</p>
           </div>
         </div>
-        
+
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="relative flex-1">
@@ -116,7 +132,7 @@ const Clubs = () => {
                 </Button>
               </form>
             </div>
-            
+
             <div className="flex space-x-2 overflow-x-auto pb-2 hide-scrollbar">
               {categories.map(category => (
                 <Button
@@ -131,7 +147,7 @@ const Clubs = () => {
             </div>
           </div>
         </div>
-        
+
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(6)].map((_, index) => (
@@ -146,15 +162,15 @@ const Clubs = () => {
               </div>
             ))}
           </div>
-        ) : filteredClubs.length > 0 ? (
-          <ClubList clubs={filteredClubs} />
+        ) : categorizedClubs.length > 0 ? (
+          <ClubList clubs={categorizedClubs} />
         ) : (
           <div className="text-center py-16">
             <Users className="h-16 w-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-xl font-medium text-gray-900 mb-2">No clubs found</h3>
             <p className="text-gray-600 mb-4">
-              {selectedCategory 
-                ? `No ${selectedCategory.toLowerCase()} clubs are currently available.` 
+              {selectedCategory
+                ? `No ${selectedCategory.toLowerCase()} clubs are currently available.`
                 : "No clubs match your search criteria."}
             </p>
             {currentUser && (
