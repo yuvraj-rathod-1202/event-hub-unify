@@ -58,9 +58,9 @@ export const NotificationProvider = ({ children }) => {
       setNotificationPermission(permission);
       
       if (permission === 'granted') {
-        // Get FCM token
+        // Get FCM token using environment variable for VAPID key
         const token = await getToken(messaging, {
-          vapidKey: 'YOUR_VAPID_KEY' // Replace with your VAPID key
+          vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY
         });
         
         if (token) {
