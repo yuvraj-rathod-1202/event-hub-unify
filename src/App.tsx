@@ -35,6 +35,8 @@ import NoticeDetails from "./pages/NoticeDetail";
 import EditClub from "./pages/EditClub";
 import EditNotice from "./pages/EditNotices";
 import EditEvent from "./pages/EditEvent";
+import Notifications from "./pages/Notifications";
+import SendNotification from "./pages/SendNotifications";
 
 const queryClient = new QueryClient();
 
@@ -70,6 +72,9 @@ const App = () => (
                   <Route path="/latest-notices" element={<LatestNotices />} />
                   <Route path="/notices/add" element={<CreateNotice />} />
                   <Route path="/notices/:noticeId" element={<NoticeDetails />} />
+
+                  <Route path="/notifications" element={<Notifications />} />
+                  <Route path="/send-notification" element={<SendNotification />} />
                   
                   {/* User Dashboard */}
                   <Route path="/dashboard" element={<UserDashboard />} />
@@ -79,6 +84,7 @@ const App = () => (
                   <Route path="/admin/clubs/edit/:clubId" element={<EditClub />} />
                   <Route path="/admin/notices/edit/:noticeId" element={<EditNotice />} />
                   <Route path="/admin/events/edit/:eventId" element={<EditEvent />} />
+                  
                   
                   {/* Catch-all route */}
                   <Route path="*" element={<NotFound />} />
