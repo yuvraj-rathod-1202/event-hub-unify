@@ -88,6 +88,7 @@ const AddEvent = () => {
         category,
         maxAttendees: maxAttendees ? parseInt(maxAttendees) : null,
         createdBy: currentUser.uid,
+        status: 'pending',
         registeredUsers: [],
       };
       
