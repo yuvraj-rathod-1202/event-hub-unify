@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Calendar, Clock, MapPin, Users, Share, ArrowLeft, Heart, Edit, Calendar as CalendarIcon } from 'lucide-react';
 import { formatDisplayDate, formatDisplayTime, convertToGoogleCalendarEvent, downloadICS } from '@/utils/calendarUtils';
 import { toast } from '@/components/ui/use-toast';
+import { CompareRef } from '../services/userService';
 
 const EventDetails = () => {
   const { eventId } = useParams();
@@ -28,7 +29,7 @@ const EventDetails = () => {
         
         // Check if user is registered
         if (currentUser && eventData.registeredUsers) {
-          setIsRegistered(eventData.registeredUsers.includes(currentUser.uid));
+          setIsRegistered(CompareRef(eventData?.registeredUsers, currentUser?.uid));
         }
         
         // Check if event is saved (would come from user data in a real app)

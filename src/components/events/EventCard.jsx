@@ -8,7 +8,7 @@ import { formatDisplayDate, formatDisplayTime } from '@/utils/calendarUtils';
 
 const EventCard = ({ event, onRegister, isRegistered, isFull, onSave, isSaved }) => {
   const [isHovered, setIsHovered] = useState(false);
-  
+
   const getEventImage = () => {
     return event.posterUrl || 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=800';
   };

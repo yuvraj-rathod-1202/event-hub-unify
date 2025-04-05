@@ -28,6 +28,14 @@ export const getUserData = async (userId) => {
   }
 };
 
+export const CompareRef = async (registeredUsers, userId) => {
+  const userRef = doc(db, 'users', userId);
+  
+  registeredUsers?.some((user) => {
+    return user == userRef;
+  })
+}
+
 // Update user profile
 export const updateUserProfile = async (userId, profileData) => {
   try {

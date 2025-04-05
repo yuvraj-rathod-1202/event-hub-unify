@@ -11,6 +11,8 @@ import ClubCard from '@/components/clubs/ClubCard';
 import NoticeCard from '@/components/notices/NoticeCard';
 import InstallPrompt from '@/components/common/InstallPrompt';
 import { registerServiceWorker } from '@/utils/pwaUtils';
+import { CompareRef } from '../services/userService';
+
 
 const Home = () => {
   const { currentUser } = useAuth();
@@ -184,7 +186,7 @@ const Home = () => {
                     key={event.id}
                     event={event}
                     onRegister={handleRegisterEvent}
-                    isRegistered={false}
+                    isRegistered={CompareRef(event.registeredUsers, currentUser?.uid)}
                     isFull={false}
                     onSave={handleSaveEvent}
                     isSaved={false}
