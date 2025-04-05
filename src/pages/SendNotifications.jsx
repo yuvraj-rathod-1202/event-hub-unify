@@ -9,6 +9,7 @@ import { ArrowLeft, Send } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
+import { sendNotificationToUserPhone } from '../services/mobilenotifications';
 
 const SendNotification = () => {
   const { currentUser } = useAuth();

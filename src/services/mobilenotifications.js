@@ -9,7 +9,7 @@ const SERVER_KEY = import.meta.env.VITE_FIREBASE_SERVER_KEY;
  * @param {object} notification - The notification object with `title` and `body`.
  * @param {object} data - Optional custom data payload.
  */
-export const sendNotificationToUser = async (fcmToken, notification, data = {}) => {
+export const sendNotificationToUserPhone = async (fcmToken, notification, data = {}) => {
   try {
     const response = await axios.post(
       'https://fcm.googleapis.com/fcm/send',

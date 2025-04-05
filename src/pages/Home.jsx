@@ -15,6 +15,7 @@ import { CompareRef, getUserData } from '../services/userService';
 import { joinClub, leaveClub } from '../services/clubService';
 import { saveNoticeForUser, unsaveNoticeForUser } from '../services/noticeService';
 import { registerForEvent } from '../services/eventService';
+import { useNotifications } from '../context/NotificationContext';
 
 
 const Home = () => {
@@ -28,8 +29,11 @@ const Home = () => {
   const [filteredClubs, setFilteredClubs] = useState([]);
   const [filteredNotices, setFilteredNotices] = useState([]);
   const [savedNotices, setSavedNotices] = useState([]);
+
+  const {requestNotificationPermission} = useNotifications();
   
   useEffect(() => {
+    requestNotificationPermission();
     const fetchData = async () => {
       setLoading(true);
       try {
