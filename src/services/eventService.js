@@ -3,6 +3,7 @@ import {
   getDocs,
   query,
   where,
+  addDoc,
   orderBy,
   limit, // Import the limit method
   startAfter, // Import startAfter for pagination
