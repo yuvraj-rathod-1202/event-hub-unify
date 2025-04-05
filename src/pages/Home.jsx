@@ -18,6 +18,10 @@ const Home = () => {
   const [events, setEvents] = useState([]);
   const [clubs, setClubs] = useState([]);
   const [notices, setNotices] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredEvents, setFilteredEvents] = useState([]);
+  const [filteredClubs, setFilteredClubs] = useState([]);
+  const [filteredNotices, setFilteredNotices] = useState([]);
   
   useEffect(() => {
     const fetchData = async () => {
@@ -34,6 +38,9 @@ const Home = () => {
         setEvents(eventsData);
         setClubs(clubsData);
         setNotices(noticesData);
+        setFilteredEvents(eventsData);
+        setFilteredClubs(clubsData);
+        setFilteredNotices(noticesData);
       } catch (error) {
         console.error('Error fetching homepage data:', error);
       } finally {
@@ -63,6 +70,24 @@ const Home = () => {
   const handleSaveNotice = (noticeId) => {
     console.log('Save notice:', noticeId);
   };
+
+  const handleSearch = () => {
+    const filteredEvents = events.filter((event) =>
+      event.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const filteredClubs = clubs.filter((club) =>
+      club.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const filteredNotices = notices.filter((notice) =>
+      notice.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    setFilteredEvents(filteredEvents);
+    setFilteredClubs(filteredClubs);
+    setFilteredNotices(filteredNotices);
+  }
   
   return (
     <div className="min-h-screen">
@@ -80,7 +105,7 @@ const Home = () => {
                 asChild
                 size="lg"
                 variant="secondary"
-                className="bg-white text-primary hover:bg-gray-100"
+                className="bg-white text-primary p-2 hover:bg-gray-100"
               >
                 <Link to="/events">Explore Events</Link>
               </Button>
@@ -110,9 +135,11 @@ const Home = () => {
                 type="text"
                 placeholder="Search events, clubs or notices..."
                 className="flex-1 p-2 focus:outline-none"
+                onChange={(e) => setSearchQuery(e.target.value)}
+                value={searchQuery}
               />
             </div>
-            <Button className="ml-2">Search</Button>
+            <Button className="ml-2" onClick={handleSearch}>Search</Button>
           </div>
         </div>
       </section>
@@ -150,9 +177,9 @@ const Home = () => {
               ))}
             </div>
           ) : (
-            events.length > 0 ? (
+            filteredEvents.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {events.map(event => (
+                {filteredEvents.map(event => (
                   <EventCard
                     key={event.id}
                     event={event}
@@ -210,9 +237,9 @@ const Home = () => {
               ))}
             </div>
           ) : (
-            clubs.length > 0 ? (
+            filteredClubs.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {clubs.map(club => (
+                {filteredClubs.map(club => (
                   <ClubCard
                     key={club.id}
                     club={club}
@@ -266,9 +293,9 @@ const Home = () => {
               ))}
             </div>
           ) : (
-            notices.length > 0 ? (
+            filteredNotices.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {notices.map(notice => (
+                {filteredNotices.map(notice => (
                   <NoticeCard
                     key={notice.id}
                     notice={notice}
