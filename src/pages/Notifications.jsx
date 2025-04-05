@@ -97,6 +97,10 @@ const Notifications = () => {
                             ? "Invalid Date"
                             : "No Date"}
                         </p>
+                        <p>
+                            <span className="font-semibold">From:</span>{" "}
+                            {notification.senderId || "Unknown"}
+                        </p>
                       </div>
                       {notification.link && (
                         <Button asChild variant="outline" size="sm">

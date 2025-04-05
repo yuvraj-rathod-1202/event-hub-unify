@@ -58,12 +58,13 @@ export const getNotificationsForUser = async (userId) => {
     }
 }
 
-export const sendNotificationToUser = async (userId, message) => {
+export const sendNotificationToUser = async (userId, message, senderId) => {
     try {
         const notificationsRef = collection(db, 'notifications');
         await addDoc(notificationsRef, {
             userId,
             message,
+            senderId,
             timestamp: serverTimestamp(),
         });
     } catch (error) {
