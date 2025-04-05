@@ -11,8 +11,9 @@ import ClubCard from '@/components/clubs/ClubCard';
 import NoticeCard from '@/components/notices/NoticeCard';
 import InstallPrompt from '@/components/common/InstallPrompt';
 import { registerServiceWorker } from '@/utils/pwaUtils';
-import { CompareRef } from '../services/userService';
+import { CompareRef, getUserData } from '../services/userService';
 import { joinClub, leaveClub } from '../services/clubService';
+import { saveNoticeForUser, unsaveNoticeForUser } from '../services/noticeService';
 
 
 const Home = () => {
@@ -82,14 +83,26 @@ const Home = () => {
         console.error('Error leaving club:', error);
       });
   };
+
+  const handleSavedNotice = async (noticeId) => {
+    const user = await getUserData(currentUser?.uid);
+    const savedNotices = user?.savedNotices || [];
+    const isSaved = savedNotices.includes(noticeId);
+    return isSaved;
+  }
   
   const handleSaveClub = (clubId) => {
     console.log('Save club:', clubId);
   };
   
   const handleSaveNotice = (noticeId) => {
-    console.log('Save notice:', noticeId);
+    saveNoticeForUser(noticeId, currentUser.uid);
   };
+
+  const handleRemoveNotice = (noticeId) => {
+    console.log('Unsave notice:', noticeId);
+    unsaveNoticeForUser(noticeId, currentUser.uid);
+  }
 
   const handleSearch = () => {
     const filteredEvents = events.filter((event) =>
@@ -321,7 +334,8 @@ const Home = () => {
                     key={notice.id}
                     notice={notice}
                     onSave={handleSaveNotice}
-                    isSaved={false}
+                    isSaved={handleSavedNotice(notice.id)}
+                    onUnSave={handleRemoveNotice}
                   />
                 ))}
               </div>

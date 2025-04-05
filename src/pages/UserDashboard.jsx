@@ -40,6 +40,7 @@ const UserDashboard = () => {
         setRegisteredEvents(events);
         setClubMemberships(clubs);
         setSavedNotices(notices);
+        console.log("notices", notices);
       } catch (error) {
         console.error('Error fetching user dashboard data:', error);
       } finally {

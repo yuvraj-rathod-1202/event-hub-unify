@@ -5,7 +5,7 @@ import { Calendar, Bookmark } from 'lucide-react';
 import { formatDisplayDate } from '@/utils/calendarUtils';
 import { cn } from '@/lib/utils';
 
-const NoticeCard = ({ notice, onSave, isSaved }) => {
+const NoticeCard = ({ notice, onSave, isSaved, onUnSave }) => {
   const getCategoryBadgeClass = (category) => {
     switch (category.toLowerCase()) {
       case 'academic':
@@ -29,7 +29,7 @@ const NoticeCard = ({ notice, onSave, isSaved }) => {
         </span>
         
         <button
-          onClick={() => onSave(notice.id)}
+          onClick={!isSaved ? () => onSave(notice.id) : () => onUnSave(notice.id)}
           className={cn(
             "text-gray-400 hover:text-primary transition-colors",
             isSaved && "text-primary"
