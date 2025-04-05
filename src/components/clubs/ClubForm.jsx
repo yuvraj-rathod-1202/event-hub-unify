@@ -296,7 +296,7 @@ const ClubForm = ({ onSubmit, isLoading, club, isupdate=false }) => {
             {/* Submit Button */}
             <div className="flex justify-end">
               <Button type="submit" disabled={isLoading} className="flex gap-2">
-                {isLoading ? (
+                {isupdate ? isLoading ? (
                   <>
                     <div className="h-4 w-4 rounded-full border-2 border-current border-r-transparent animate-spin" />
                     Updating...
@@ -305,6 +305,17 @@ const ClubForm = ({ onSubmit, isLoading, club, isupdate=false }) => {
                   <>
                     Update
                   </>
+                ): (
+                  isLoading ? (
+                    <>
+                      <div className="h-4 w-4 rounded-full border-2 border-current border-r-transparent animate-spin" />
+                      Creating...
+                    </>
+                  ) : (
+                    <>
+                      Create
+                    </>
+                  )
                 )}
               </Button>
             </div>
