@@ -20,6 +20,7 @@ This project implements a notification system using React, Firebase, and Tailwin
 
 ## Project Structure
 
+```
 notification-system/
 ├── public/
 │   └── index.html
@@ -52,7 +53,7 @@ notification-system/
 ├── .gitignore
 ├── vite.config.js       // Vite configuration, if using Vite
 └── tsconfig.json      // TypeScript configuration
-
+```
 
 ## Setup Instructions
 
