@@ -6,6 +6,10 @@
 
 This project implements a notification system using React, Firebase, and Tailwind CSS. It allows users to receive and send notifications within a dashboard environment.
 
+## Contributing
+
+We welcome contributions! Please read our [Contributing Guidelines](CONTRIBUTING.md) for details on how to get started, coding standards, and the contribution process.
+
 ## Technologies Used
 
 * **React:** A JavaScript library for building user interfaces.
