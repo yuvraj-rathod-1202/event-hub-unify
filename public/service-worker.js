@@ -1,6 +1,3 @@
-
-// Service Worker for EventHub Unify
-
 const CACHE_NAME = 'eventhub-v1';
 
 const STATIC_ASSETS = [
