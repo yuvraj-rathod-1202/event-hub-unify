@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Discussions
+    url: https://github.com/yuvraj-rathod-1202/event-hub-unify/discussions
+    about: Ask questions and discuss ideas with the community
+  - name: 📖 Documentation
+    url: https://github.com/yuvraj-rathod-1202/event-hub-unify/blob/main/README.md
+    about: Check our documentation for setup and usage instructions
+  - name: 🚀 Live Demo
+    url: https://event-hub-unify.vercel.app/
+    about: Try out the live application
