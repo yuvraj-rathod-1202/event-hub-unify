@@ -9,7 +9,7 @@ export const registerServiceWorker = async () => {
         scope: '/'
       });
       
-      console.log('Service worker registered successfully:', registration);
+      // console.log('Service worker registered successfully:', registration);
       return registration;
     } catch (error) {
       console.error('Service worker registration failed:', error);
